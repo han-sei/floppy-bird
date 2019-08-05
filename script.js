@@ -21,10 +21,9 @@ function column(){
     this.drawColumns = function(height){
         context.beginPath();
         context.rect(this.position,0,60, this.height);
-        context.rect(this.position,this.height + gap ,60, canvas.height );
+        context.rect(this.position,this.height + gap ,colwidth, canvas.height );
         context.fillStyle = "blue";
         context.fill();
-        console.log(this.height);
     }
 };
 
@@ -33,6 +32,7 @@ function column(){
 var gap = 260;
 var distance = 320;
 var flopsize = 50;
+var colwidth = 60;
 var flopx = canvas.width/2 - flopsize/2;
 var flopy = canvas.height/2 - flopsize/2;
 var flopspeed = 1;
@@ -43,6 +43,8 @@ var collist = [theFirstCol];
 var up = false;
 var oldstamp = 0;
 var newstamp = performance.now();
+var score = 0;
+var crossed = false;
 
 
 document.addEventListener( 'keydown', (event) => {
@@ -65,7 +67,6 @@ function gravity(){
         flopspeed += dif/10;
     }
     flopy += flopspeed
-    console.log(dif)
 }
 
 function flop(){
@@ -88,7 +89,11 @@ function animation(){
         }
         element.position -= colspeed;
         element.drawColumns();
-    });}
+    });
+
+    context.font = "30px Arial";
+    context.fillText("Score " + score, 10, 50); 
+}
 
 function drawFloppy() {
     context.beginPath();
@@ -106,13 +111,39 @@ function drawBG() {
     context.stroke();
 }
 
+function scoreCounter(){
+    for(var i = 0; i < collist.length; i++){
+        console.log(flopx);
+        console.log(collist[i].position + colwidth);
+        if(flopx > collist[i].position && flopx < collist[i].position + colwidth){
+            crossed == true;
+        } 
+    }
+}
+
+function collisiondetection() {
+    for(var i = 0; i < collist.length; i++){
+        
+        if(flopx > collist[i].position && flopx < collist[i].position + colwidth){
+            if(flopy < collist[i].height || flopy > collist[i].height + gap){
+                return true;
+            }
+        }
+    }
+}
+
 function draw() {
     drawBG();
     gravity();
     flop();
+    scoreCounter();
+    if(collisiondetection()){
+        location.reload();
+    }
     drawFloppy();
     animation();
     requestAnimationFrame(draw);
 }
+
 
 requestAnimationFrame(draw);
