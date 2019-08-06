@@ -81,6 +81,7 @@ function animation(){
     if(collist[0].position < canvas.width - distance) {
         var col = new column();
         col.position = canvas.width;
+        score++;
         collist.unshift(col);
     }    
     collist.forEach(element => {
@@ -111,16 +112,6 @@ function drawBG() {
     context.stroke();
 }
 
-function scoreCounter(){
-    for(var i = 0; i < collist.length; i++){
-        console.log(flopx);
-        console.log(collist[i].position + colwidth);
-        if(flopx > collist[i].position && flopx < collist[i].position + colwidth){
-            crossed == true;
-        } 
-    }
-}
-
 function collisiondetection() {
     for(var i = 0; i < collist.length; i++){
         
@@ -136,7 +127,6 @@ function draw() {
     drawBG();
     gravity();
     flop();
-    scoreCounter();
     if(collisiondetection()){
         location.reload();
     }
